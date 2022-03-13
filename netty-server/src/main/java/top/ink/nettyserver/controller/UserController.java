@@ -8,6 +8,7 @@ import top.ink.nettyserver.entity.user.User;
 import top.ink.nettyserver.server.UserService;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * desc: 用户接口
@@ -29,6 +30,11 @@ public class UserController {
     @PostMapping("/login")
     public Response<UserDTO> login(@RequestBody LoginDTO loginDTO){
         return userService.login(loginDTO);
+    }
+
+    @GetMapping("/search")
+    public Response<List<UserDTO>> search(String key){
+        return userService.search(key);
     }
 
 }

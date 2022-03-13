@@ -1,6 +1,11 @@
 package top.ink.nettyserver.entity.dto;
 
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -23,4 +28,20 @@ public class UserDTO {
     private String background;
 
     private Integer days;
+
+    public static UserDTO copy(Object source){
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(source,userDTO);
+        return userDTO;
+    }
+
+    public static <T> List<UserDTO> copyList(List<T> sourceList){
+        List<UserDTO> list = new ArrayList<>();
+        sourceList.forEach( source -> {
+            UserDTO userDTO = new UserDTO();
+            BeanUtils.copyProperties(source,userDTO);
+            list.add(userDTO);
+        });
+        return list;
+    }
 }

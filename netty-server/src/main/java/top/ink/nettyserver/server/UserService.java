@@ -18,6 +18,7 @@ import top.ink.nettyserver.mapper.UserMapper;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * desc: 用户相关类
@@ -59,8 +60,6 @@ public class UserService {
         return Response.success(userDTO);
     }
 
-
-
     /**
      * Description: 登录
      * @param loginDTO
@@ -75,8 +74,7 @@ public class UserService {
         if (user == null || !user.getPassword().equals(loginDTO.getPassWord())) {
             return Response.error(ResponseCode.PARAM_FAIL, "用户名或者密码错误");
         }
-        UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(user,userDTO);
+        UserDTO userDTO = UserDTO.copy(user);
         userDTO.setDays(calDays(user));
         log.info("login userDTO: {}", userDTO);
         return Response.success(userDTO);
@@ -85,5 +83,22 @@ public class UserService {
     private int calDays(User user) {
         long betweenDay = DateUtil.between(new Date(user.getCreated()), new Date(), DateUnit.DAY);
         return betweenDay == 0 ? 1 : (int) betweenDay;
+    }
+
+    /**
+     * Description: 搜索用户
+     * @param key
+     * return top.ink.nettyserver.entity.common.Response<java.util.List<top.ink.nettyserver.entity.dto.UserDTO>>
+     * Author: ink
+     * Date: 2022/3/13
+    */
+    public Response<List<UserDTO>> search(String key) {
+        if (!StringUtils.hasText(key)) {
+            return Response.error(ResponseCode.ERROR, "关键字不能为空");
+        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("user_name", key);
+        List<User> list = userMapper.selectList(queryWrapper);
+        return Response.success(UserDTO.copyList(list));
     }
 }
