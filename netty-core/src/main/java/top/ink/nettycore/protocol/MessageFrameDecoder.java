@@ -1,12 +1,14 @@
 package top.ink.nettycore.protocol;
 
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import org.springframework.stereotype.Component;
 
 /**
  * desc: decoder
  * @author ink
  * date:2022-02-28 22:20
  */
+@Component
 public class MessageFrameDecoder extends LengthFieldBasedFrameDecoder {
 
     public MessageFrameDecoder(){

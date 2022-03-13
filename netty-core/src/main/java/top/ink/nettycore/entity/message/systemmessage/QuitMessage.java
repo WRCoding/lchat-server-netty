@@ -20,8 +20,25 @@ public class QuitMessage extends SystemMessage{
     /** 接收方 */
     private String receiver;
 
+    public QuitMessage() {
+        super();
+        this.setMsgType();
+    }
+
     @Override
-    public byte getMsgType() {
-        return MsgType.QUIT.type();
+    public void setMsgType() {
+        this.msgType = MsgType.QUIT.type();
+    }
+
+    @Override
+    public String toString() {
+        return "QuitMessage{" +
+                "seqId='" + seqId + '\'' +
+                ", type=" + type +
+                ", msgType=" + msgType +
+                ", contentType=" + contentType +
+                ", sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
+                '}';
     }
 }

@@ -21,7 +21,10 @@ public enum MsgType {
     INIT(6),
 
     /** ACK */
-    ACK(8);
+    ACK(8),
+
+    /** 错误 */
+    ERROR(-1);
 
     private byte type;
 
@@ -31,5 +34,14 @@ public enum MsgType {
 
     public byte type() {
         return type;
+    }
+
+    public static MsgType getMsgType(byte type){
+        for (MsgType msgType : MsgType.values()) {
+            if (msgType.type == type){
+                return msgType;
+            }
+        }
+        return null;
     }
 }

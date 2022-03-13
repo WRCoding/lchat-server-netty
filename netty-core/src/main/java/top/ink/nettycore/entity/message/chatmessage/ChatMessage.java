@@ -16,10 +16,14 @@ import java.util.Map;
  * date:2022-02-27 19:54
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
 public abstract class ChatMessage extends Message {
 
     private static final Map<Byte, Class<? extends ChatMessage>> CHAT_MESSAGE_CLASSES = new HashMap<>();
+
+    public ChatMessage() {
+        this.setType();
+        this.setMsgType();
+    }
 
     static {
         CHAT_MESSAGE_CLASSES.put(ContentType.TEXT.type(), TextMessage.class);
@@ -31,18 +35,13 @@ public abstract class ChatMessage extends Message {
     }
 
     @Override
-    public byte getType() {
-        return Type.CHAT.type();
+    public void setType() {
+        this.type = Type.CHAT.type();
     }
 
     @Override
-    public byte getMsgType() {
-        //默认为单聊
-        return MsgType.SINGLE.type();
+    public void setMsgType() {
+        this.msgType = MsgType.SINGLE.type();
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }

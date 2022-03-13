@@ -33,18 +33,27 @@ public class TextMessage extends ChatMessage {
      */
     private String receiver;
 
+    public TextMessage() {
+        super();
+        this.setContentType();
+    }
 
     @Override
-    public byte getContentType() {
-        return ContentType.TEXT.type();
+    public void setContentType() {
+        this.contentType = ContentType.TEXT.type();
     }
+
 
     @Override
     public String toString() {
         return "TextMessage{" +
-                "content='" + content + '\'' +
+                "seqId='" + seqId + '\'' +
+                ", type=" + type +
+                ", msgType=" + msgType +
+                ", contentType=" + contentType +
+                ", content='" + content + '\'' +
                 ", sender='" + sender + '\'' +
-                ", receiver='" + receiver + '\'' + super.toString() +
+                ", receiver='" + receiver + '\'' +
                 '}';
     }
 }

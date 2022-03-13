@@ -12,10 +12,11 @@ public enum Type {
     CHAT(0),
 
     /** 系统 */
-    SYSTEM(2);
+    SYSTEM(2),
 
+    ERROR(-1);
 
-    private byte type;
+    private final byte type;
 
     Type(int type) {
         this.type = (byte) type;
@@ -23,5 +24,14 @@ public enum Type {
 
     public byte type() {
         return type;
+    }
+
+    public static Type getType(byte type){
+        for (Type value : Type.values()) {
+            if (value.type == type){
+                return value;
+            }
+        }
+        return ERROR;
     }
 }

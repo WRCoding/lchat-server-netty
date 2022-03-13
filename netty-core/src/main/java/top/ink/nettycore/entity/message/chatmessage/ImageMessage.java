@@ -23,8 +23,26 @@ public class ImageMessage extends ChatMessage{
     /** 接收方 */
     private String receiver;
 
+    public ImageMessage() {
+        super();
+        this.setContentType();
+    }
+
     @Override
-    public byte getContentType() {
-        return ContentType.IMAGE.type();
+    public void setContentType() {
+        this.contentType = ContentType.IMAGE.type();
+    }
+
+    @Override
+    public String toString() {
+        return "ImageMessage{" +
+                "seqId='" + seqId + '\'' +
+                ", type=" + type +
+                ", msgType=" + msgType +
+                ", contentType=" + contentType +
+                ", content='" + content + '\'' +
+                ", sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
+                '}';
     }
 }

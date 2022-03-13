@@ -11,6 +11,7 @@ import top.ink.nettycore.entity.message.chatmessage.ChatMessage;
 import top.ink.nettycore.entity.message.systemmessage.SystemMessage;
 import top.ink.nettycore.protocol.Algorithm;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -19,9 +20,10 @@ import java.util.List;
  * @author ink
  * date:2022-02-28 21:20
  */
+@Component
 public class MessageCodec extends ByteToMessageCodec<Message> {
 
-//    @Value("${message.serializer}")
+    @Value("${message.serializer}")
     String serializer = "JSON";
 
 

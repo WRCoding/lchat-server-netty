@@ -20,8 +20,25 @@ public class AckMessage extends SystemMessage{
     /** 接收方 */
     private String receiver;
 
+    public AckMessage() {
+        super();
+        this.setMsgType();
+    }
+
     @Override
-    public byte getMsgType() {
-        return MsgType.ACK.type();
+    public void setMsgType() {
+        this.msgType = MsgType.ACK.type();
+    }
+
+    @Override
+    public String toString() {
+        return "AckMessage{" +
+                "seqId='" + seqId + '\'' +
+                ", type=" + type +
+                ", msgType=" + msgType +
+                ", contentType=" + contentType +
+                ", sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
+                '}';
     }
 }

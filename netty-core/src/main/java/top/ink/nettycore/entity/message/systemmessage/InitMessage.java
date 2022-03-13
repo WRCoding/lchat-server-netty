@@ -20,8 +20,25 @@ public class InitMessage extends SystemMessage{
     /** 接收方 */
     private String receiver;
 
+    public InitMessage() {
+        super();
+        this.setMsgType();
+    }
+
     @Override
-    public byte getMsgType() {
-        return MsgType.INIT.type();
+    public void setMsgType() {
+        super.msgType = MsgType.INIT.type();
+    }
+
+    @Override
+    public String toString() {
+        return "InitMessage{" +
+                "seqId='" + seqId + '\'' +
+                ", type=" + type +
+                ", msgType=" + msgType +
+                ", contentType=" + contentType +
+                ", sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
+                '}';
     }
 }

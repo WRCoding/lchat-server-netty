@@ -10,19 +10,47 @@ import top.ink.nettycore.entity.BaseEntity;
  * date:2022-02-22 23:21
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
 public abstract class Message extends BaseEntity {
     /** 序列号 */
-    private String seqId;
+    protected String seqId;
 
     /** 类型type：Chat,System */
-    private byte type;
+    protected byte type;
 
     /** 消息类型 */
-    private byte msgType;
+    protected byte msgType;
 
     /** 内容类型 */
-    private byte contentType;
+    protected byte contentType;
+
+
+    /**
+     * Description: 设置seqId
+     * @param seqId
+     * return void
+     * Author: ink
+     * Date: 2022/3/6
+    */
+    public void setSeqId(String seqId){
+        this.seqId = seqId;
+    }
+
+    /**
+     * Description: 返回seqId
+     * @return byte
+     * Author: ink
+     * Date: 2022/3/6
+     */
+    public String getSeqId(){
+        return this.seqId;
+    }
+
+    /**
+     * Description: 返回类型
+     * Author: ink
+     * Date: 2022/2/27
+    */
+    public abstract void setType();
 
 
     /**
@@ -31,7 +59,17 @@ public abstract class Message extends BaseEntity {
      * Author: ink
      * Date: 2022/2/27
     */
-    public abstract byte getType();
+    public byte getType(){
+        return type;
+    }
+
+    /**
+     * Description: 设置消息类型
+     * @return byte
+     * Author: ink
+     * Date: 2022/2/27
+     */
+    public abstract void setMsgType();
 
     /**
      * Description: 返回消息类型
@@ -39,7 +77,17 @@ public abstract class Message extends BaseEntity {
      * Author: ink
      * Date: 2022/2/27
     */
-    public abstract byte getMsgType();
+    public byte getMsgType(){
+        return msgType;
+    }
+
+    /**
+     * Description: 设置内容类型
+     * @return byte
+     * Author: ink
+     * Date: 2022/2/27
+     */
+    public abstract void setContentType();
 
     /**
      * Description: 返回内容类型
@@ -47,7 +95,9 @@ public abstract class Message extends BaseEntity {
      * Author: ink
      * Date: 2022/2/27
      */
-    public abstract byte getContentType();
+    public byte getContentType(){
+        return contentType;
+    }
 
 
 

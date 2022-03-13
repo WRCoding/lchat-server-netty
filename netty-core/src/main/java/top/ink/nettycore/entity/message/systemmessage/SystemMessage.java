@@ -20,12 +20,16 @@ import java.util.Map;
  * date:2022-02-27 19:59
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
 public abstract class SystemMessage extends Message {
 
-    protected String content = "-";
+    private final String content = "-";
 
     private static final Map<Byte, Class<? extends SystemMessage>> SYSTEM_MESSAGE_CLASSES = new HashMap<>();
+
+    public SystemMessage() {
+        this.setContentType();
+        this.setType();
+    }
 
     static {
         SYSTEM_MESSAGE_CLASSES.put(MsgType.QUIT.type(), QuitMessage.class);
@@ -38,6 +42,11 @@ public abstract class SystemMessage extends Message {
     }
 
     @Override
+    public void setType() {
+        super.type = Type.SYSTEM.type();
+    }
+
+    @Override
     public byte getType() {
         return Type.SYSTEM.type();
     }
@@ -45,5 +54,10 @@ public abstract class SystemMessage extends Message {
     @Override
     public byte getContentType() {
         return ContentType.NULL.type();
+    }
+
+    @Override
+    public void setContentType() {
+        this.contentType = (ContentType.NULL.type());
     }
 }
