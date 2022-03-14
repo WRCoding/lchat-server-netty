@@ -11,9 +11,12 @@ import top.ink.nettycore.util.RedisUtil;
 import top.ink.nettyserver.LcIdGenerate;
 import top.ink.nettyserver.entity.common.Response;
 import top.ink.nettyserver.entity.common.ResponseCode;
+import top.ink.nettyserver.entity.dto.FriendDTO;
 import top.ink.nettyserver.entity.dto.LoginDTO;
 import top.ink.nettyserver.entity.dto.UserDTO;
+import top.ink.nettyserver.entity.user.Friend;
 import top.ink.nettyserver.entity.user.User;
+import top.ink.nettyserver.mapper.FriendMapper;
 import top.ink.nettyserver.mapper.UserMapper;
 
 import javax.annotation.Resource;
@@ -33,6 +36,9 @@ public class UserService {
     @Resource
     private UserMapper userMapper;
 
+
+    @Resource
+    private FriendMapper friendMapper;
 
     /**
      * Description: 注册用户
@@ -100,5 +106,30 @@ public class UserService {
         queryWrapper.like("user_name", key);
         List<User> list = userMapper.selectList(queryWrapper);
         return Response.success(UserDTO.copyList(list));
+    }
+
+    /**
+     * Description: 添加好友
+     * @param friendDTO
+     * return top.ink.nettyserver.entity.common.Response<top.ink.nettyserver.entity.dto.UserDTO>
+     * Author: ink
+     * Date: 2022/3/14
+    */
+    public Response<List<UserDTO>> addFriend(FriendDTO friendDTO) {
+        QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("lid",friendDTO.getLid()).eq("friend_lid",friendDTO.getFriendLid());
+        Friend one = friendMapper.selectOne(queryWrapper);
+        if (one != null){
+            return Response.error(ResponseCode.PARAM_FAIL,"已经是好友");
+        }
+        friendMapper.insert(Friend.copy(friendDTO));
+        return Response.success(getFriendInfoByLid(friendDTO.getLid()));
+    }
+
+    private List<UserDTO> getFriendInfoByLid(String lid) {
+        List<String> friendLids = friendMapper.findFriendsByLid(lid);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("lid", friendLids);
+        return UserDTO.copyList(userMapper.selectList(queryWrapper));
     }
 }

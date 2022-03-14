@@ -2,8 +2,10 @@ package top.ink.nettyserver.controller;
 
 import org.springframework.web.bind.annotation.*;
 import top.ink.nettyserver.entity.common.Response;
+import top.ink.nettyserver.entity.dto.FriendDTO;
 import top.ink.nettyserver.entity.dto.LoginDTO;
 import top.ink.nettyserver.entity.dto.UserDTO;
+import top.ink.nettyserver.entity.user.Friend;
 import top.ink.nettyserver.entity.user.User;
 import top.ink.nettyserver.server.UserService;
 
@@ -35,6 +37,11 @@ public class UserController {
     @GetMapping("/search")
     public Response<List<UserDTO>> search(String key){
         return userService.search(key);
+    }
+
+    @PostMapping("/addFriend")
+    public Response<List<UserDTO>> addFriend(@RequestBody FriendDTO friendDTO){
+        return userService.addFriend(friendDTO);
     }
 
 }
