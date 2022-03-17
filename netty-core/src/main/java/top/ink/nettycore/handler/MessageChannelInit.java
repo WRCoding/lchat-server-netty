@@ -51,40 +51,37 @@ public class MessageChannelInit extends ChannelInitializer<NioSocketChannel> {
 
     @Override
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
-        nioSocketChannel.pipeline().addLast(messageFrameDecoder);
+        nioSocketChannel.pipeline().addLast(new MessageFrameDecoder());
         nioSocketChannel.pipeline().addLast(messageCodec);
-//        nioSocketChannel.pipeline().addLast(messageCodec);
-//        nioSocketChannel.pipeline().addLast(new StringEncoder());
-//        nioSocketChannel.pipeline().addLast(new StringDecoder());
         nioSocketChannel.pipeline().addLast(LOGGING_HANDLER);
-        nioSocketChannel.pipeline().addLast(new IdleStateHandler(1800, 0, 0));
-        nioSocketChannel.pipeline().addLast(new ChannelDuplexHandler() {
-
-            @Override
-            public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                ChatMessage d = (ChatMessage) msg;
-                System.out.println(d);
-                super.channelRead(ctx, msg);
-            }
-
-            @Override
-            public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-                IdleStateEvent event = (IdleStateEvent) evt;
-                // 触发了读空闲事件
-                if (event.state() == IdleState.READER_IDLE) {
-                    Channel channel = ctx.channel();
-                    InitMessage message = new InitMessage();
-                    message.setSender("heart");
-                    message.setReceiver("heart");
-                    message.setSeqId("2");
-                    InetSocketAddress address = (InetSocketAddress) channel.remoteAddress();
-                    log.info("已经 5s 没有读到数据了,port: " + address.getPort());
-                    ctx.writeAndFlush("message");
-                }
-            }
-        });
+//        nioSocketChannel.pipeline().addLast(new IdleStateHandler(1800, 0, 0));
+//        nioSocketChannel.pipeline().addLast(new ChannelDuplexHandler() {
+//
+//            @Override
+//            public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+//                ChatMessage d = (ChatMessage) msg;
+//                System.out.println(d);
+//                super.channelRead(ctx, msg);
+//            }
+//
+//            @Override
+//            public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+//                IdleStateEvent event = (IdleStateEvent) evt;
+//                // 触发了读空闲事件
+//                if (event.state() == IdleState.READER_IDLE) {
+//                    Channel channel = ctx.channel();
+//                    InitMessage message = new InitMessage();
+//                    message.setSender("heart");
+//                    message.setReceiver("heart");
+//                    message.setSeqId("2");
+//                    InetSocketAddress address = (InetSocketAddress) channel.remoteAddress();
+//                    log.info("已经 5s 没有读到数据了,port: " + address.getPort());
+//                    ctx.writeAndFlush("message");
+//                }
+//            }
+//        });
 //        nioSocketChannel.pipeline().addLast(LOGGING_HANDLER);
         nioSocketChannel.pipeline().addLast(chatMessageHandler);
-//        nioSocketChannel.pipeline().addLast(systemMessageHandler);
+        nioSocketChannel.pipeline().addLast(systemMessageHandler);
     }
 }

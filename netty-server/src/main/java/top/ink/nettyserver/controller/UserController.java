@@ -44,4 +44,9 @@ public class UserController {
         return userService.addFriend(friendDTO);
     }
 
+    @GetMapping("/friends")
+    public Response<List<UserDTO>> friends(String lid){
+        return userService.friends(lid);
+    }
+
 }

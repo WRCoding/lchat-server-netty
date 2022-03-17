@@ -3,6 +3,7 @@ package top.ink.nettycore.handler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 import top.ink.nettycore.entity.message.chatmessage.ChatMessage;
 import top.ink.nettycore.util.RedisUtil;
@@ -25,7 +26,8 @@ public class ChatMessageHandler extends SimpleChannelInboundHandler<ChatMessage>
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ChatMessage chatMessage) throws Exception {
-        System.out.println(" 12312123123123");
+        System.out.println("ChatMessageHandler:channelRead0");
         System.out.println(chatMessage.toString());
+        channelHandlerContext.writeAndFlush(chatMessage);
     }
 }
