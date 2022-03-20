@@ -52,7 +52,7 @@ public class MessageChannelInit extends ChannelInitializer<NioSocketChannel> {
     @Override
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
         nioSocketChannel.pipeline().addLast(new MessageFrameDecoder());
-        nioSocketChannel.pipeline().addLast(messageCodec);
+        nioSocketChannel.pipeline().addLast(new MessageCodec());
         nioSocketChannel.pipeline().addLast(LOGGING_HANDLER);
 //        nioSocketChannel.pipeline().addLast(new IdleStateHandler(1800, 0, 0));
 //        nioSocketChannel.pipeline().addLast(new ChannelDuplexHandler() {
@@ -73,7 +73,7 @@ public class MessageChannelInit extends ChannelInitializer<NioSocketChannel> {
 //                    InitMessage message = new InitMessage();
 //                    message.setSender("heart");
 //                    message.setReceiver("heart");
-//                    message.setSeqId("2");
+//                    message.setMsgSeq("2");
 //                    InetSocketAddress address = (InetSocketAddress) channel.remoteAddress();
 //                    log.info("已经 5s 没有读到数据了,port: " + address.getPort());
 //                    ctx.writeAndFlush("message");

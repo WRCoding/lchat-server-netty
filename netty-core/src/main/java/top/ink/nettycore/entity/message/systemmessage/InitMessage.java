@@ -33,7 +33,7 @@ public class InitMessage extends SystemMessage{
     @Override
     public String toString() {
         return "InitMessage{" +
-                "seqId='" + seqId + '\'' +
+                "msgSeq='" + msgSeq + '\'' +
                 ", type=" + type +
                 ", msgType=" + msgType +
                 ", contentType=" + contentType +

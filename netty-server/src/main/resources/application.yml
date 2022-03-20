@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 1001101lb
-    url: jdbc:mysql://localhost:3306/chat_server_netty?serverTimezone=Asia/Shanghai&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/chat_server_netty?serverTimezone=Asia/Shanghai
 
 server:
   port: 7777

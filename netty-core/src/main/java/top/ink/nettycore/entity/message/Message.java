@@ -1,6 +1,5 @@
 package top.ink.nettycore.entity.message;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.ink.nettycore.entity.BaseEntity;
 
@@ -12,7 +11,7 @@ import top.ink.nettycore.entity.BaseEntity;
 @EqualsAndHashCode(callSuper = true)
 public abstract class Message extends BaseEntity {
     /** 序列号 */
-    protected String seqId;
+    protected String msgSeq;
 
     /** 类型type：Chat,System */
     protected byte type;
@@ -26,13 +25,13 @@ public abstract class Message extends BaseEntity {
 
     /**
      * Description: 设置seqId
-     * @param seqId
+     * @param msgSeq
      * return void
      * Author: ink
      * Date: 2022/3/6
     */
-    public void setSeqId(String seqId){
-        this.seqId = seqId;
+    public void setMsgSeq(String msgSeq){
+        this.msgSeq = msgSeq;
     }
 
     /**
@@ -41,8 +40,8 @@ public abstract class Message extends BaseEntity {
      * Author: ink
      * Date: 2022/3/6
      */
-    public String getSeqId(){
-        return this.seqId;
+    public String getMsgSeq(){
+        return this.msgSeq;
     }
 
     /**

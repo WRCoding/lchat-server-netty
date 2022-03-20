@@ -33,7 +33,7 @@ public class QuitMessage extends SystemMessage{
     @Override
     public String toString() {
         return "QuitMessage{" +
-                "seqId='" + seqId + '\'' +
+                "msgSeq='" + msgSeq + '\'' +
                 ", type=" + type +
                 ", msgType=" + msgType +
                 ", contentType=" + contentType +

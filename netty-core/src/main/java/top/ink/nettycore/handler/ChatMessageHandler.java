@@ -1,11 +1,19 @@
 package top.ink.nettycore.handler;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
+import top.ink.nettycore.constant.MsgType;
 import top.ink.nettycore.entity.message.chatmessage.ChatMessage;
+import top.ink.nettycore.entity.message.chatmessage.TextMessage;
+import top.ink.nettycore.entity.message.systemmessage.AckMessage;
+import top.ink.nettycore.entity.message.systemmessage.InitMessage;
+import top.ink.nettycore.entity.message.systemmessage.QuitMessage;
+import top.ink.nettycore.server.session.Session;
 import top.ink.nettycore.util.RedisUtil;
 
 import javax.annotation.Resource;
@@ -18,16 +26,39 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @Component
+@ChannelHandler.Sharable
 public class ChatMessageHandler extends SimpleChannelInboundHandler<ChatMessage> {
 
     @Resource
-    private RedisUtil redisUtil;
+    private Session session;
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, ChatMessage chatMessage) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, ChatMessage chatMessage) throws Exception {
         System.out.println("ChatMessageHandler:channelRead0");
         System.out.println(chatMessage.toString());
-        channelHandlerContext.writeAndFlush(chatMessage);
+        switch (MsgType.getMsgType(chatMessage.getMsgType())) {
+            case SINGLE:
+                handlerSingle(ctx,chatMessage);
+                break;
+            case GROUP:
+                handlerGroup(ctx,chatMessage);
+                break;
+            default:
+                throw new UnsupportedOperationException(MsgType.getMsgType(chatMessage.getMsgType()) + "类型不支持");
+        }
+    }
+
+    private void handlerSingle(ChannelHandlerContext ctx, ChatMessage chatMessage) {
+        TextMessage textMessage = (TextMessage) chatMessage;
+        String receiver = textMessage.getReceiver();
+        if (session.exist(receiver)){
+            Channel channel = this.session.getSession(receiver);
+            channel.writeAndFlush(textMessage);
+        }
+    }
+
+    private void handlerGroup(ChannelHandlerContext ctx, ChatMessage chatMessage) {
+
     }
 }

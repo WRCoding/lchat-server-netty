@@ -47,7 +47,7 @@ public class RedisUtil {
     public boolean hasKey(String key){
         return redisTemplate.hasKey(key);
     }
-    public boolean expirse(String key, Long timeout, TimeUnit timeUnit){
+    public boolean expire(String key, Long timeout, TimeUnit timeUnit){
         return redisTemplate.expire(key,timeout,timeUnit);
     }
     /**

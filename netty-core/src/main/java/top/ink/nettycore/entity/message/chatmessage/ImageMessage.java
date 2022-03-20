@@ -36,7 +36,7 @@ public class ImageMessage extends ChatMessage{
     @Override
     public String toString() {
         return "ImageMessage{" +
-                "seqId='" + seqId + '\'' +
+                "msgSeq='" + msgSeq + '\'' +
                 ", type=" + type +
                 ", msgType=" + msgType +
                 ", contentType=" + contentType +

@@ -2,6 +2,7 @@ package top.ink.nettycore.server.session;
 
 import io.netty.channel.Channel;
 import org.springframework.stereotype.Service;
+import top.ink.nettycore.entity.message.Message;
 
 import java.io.IOException;
 
@@ -23,7 +24,7 @@ public interface Session {
      * Author: ink
      * Date: 2022/3/6
     */
-    void register(Channel channel, String lid);
+    void register(Channel channel, Message lid);
 
     /**
      * Description: 取消会话
@@ -33,4 +34,22 @@ public interface Session {
      * Date: 2022/3/6
     */
     void unRegister(String lid);
+
+    /**
+     * Description: 获取指定会话
+     * @param lid
+     * @return io.netty.channel.Channel
+     * Author: ink
+     * Date: 2022/3/20
+    */
+    Channel getSession(String lid);
+
+    /**
+     * Description: 会话是否存在
+     * @param lid
+     * @return boolean
+     * Author: ink
+     * Date: 2022/3/20
+    */
+    boolean exist(String lid);
 }

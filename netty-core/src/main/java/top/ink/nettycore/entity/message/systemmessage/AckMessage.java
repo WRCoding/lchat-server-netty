@@ -33,7 +33,7 @@ public class AckMessage extends SystemMessage{
     @Override
     public String toString() {
         return "AckMessage{" +
-                "seqId='" + seqId + '\'' +
+                "msgSeq='" + msgSeq + '\'' +
                 ", type=" + type +
                 ", msgType=" + msgType +
                 ", contentType=" + contentType +

@@ -1,25 +1,15 @@
 package top.ink.nettycore.server;
 
-import com.sun.xml.internal.stream.util.BufferAllocator;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LoggingHandler;
-import top.ink.nettycore.constant.ContentType;
-import top.ink.nettycore.entity.message.Message;
-import top.ink.nettycore.entity.message.chatmessage.ChatMessage;
-import top.ink.nettycore.entity.message.chatmessage.TextMessage;
 import top.ink.nettycore.entity.message.systemmessage.InitMessage;
-import top.ink.nettycore.protocol.MessageFrameDecoder;
-import top.ink.nettycore.protocol.codec.MessageCodec;
 
 import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
 
 /**
  * desc: 测试客户端
@@ -56,7 +46,7 @@ public class ClientBoot {
         InitMessage message = new InitMessage();
         message.setSender("xi");
         message.setReceiver("li");
-        message.setSeqId("12123132");
+        message.setMsgSeq("12123132");
         System.out.println(message.getType());
         System.out.println(message.getMsgType());
         System.out.println(message.getContentType());

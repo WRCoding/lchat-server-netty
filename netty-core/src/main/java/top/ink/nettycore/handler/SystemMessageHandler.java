@@ -1,6 +1,7 @@
 package top.ink.nettycore.handler;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
+@ChannelHandler.Sharable
 public class SystemMessageHandler extends SimpleChannelInboundHandler<SystemMessage> {
 
     @Resource
@@ -33,7 +35,6 @@ public class SystemMessageHandler extends SimpleChannelInboundHandler<SystemMess
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        log.info("---SystemMessageHandler---");
     }
 
     @Override
@@ -56,7 +57,7 @@ public class SystemMessageHandler extends SimpleChannelInboundHandler<SystemMess
 
     private void handlerInit(ChannelHandlerContext ctx, InitMessage initMessage) {
         Channel channel = ctx.channel();
-        session.register(channel, initMessage.getSender());
+        session.register(channel, initMessage);
     }
 
     private void handlerAck(ChannelHandlerContext ctx, AckMessage ackMessage) {

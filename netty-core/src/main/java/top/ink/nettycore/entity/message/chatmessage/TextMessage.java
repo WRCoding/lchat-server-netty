@@ -5,8 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.ink.nettycore.constant.ContentType;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * desc: TextMessage
  *
@@ -47,7 +45,7 @@ public class TextMessage extends ChatMessage {
     @Override
     public String toString() {
         return "TextMessage{" +
-                "seqId='" + seqId + '\'' +
+                "msgSeq='" + msgSeq + '\'' +
                 ", type=" + type +
                 ", msgType=" + msgType +
                 ", contentType=" + contentType +
