@@ -13,7 +13,6 @@ import top.ink.nettycore.constant.ContentType;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ToString
 public class TextMessage extends ChatMessage {
 
     /**
@@ -21,15 +20,6 @@ public class TextMessage extends ChatMessage {
      */
     private String content;
 
-    /**
-     * 发生方
-     */
-    private String sender;
-
-    /**
-     * 接收方
-     */
-    private String receiver;
 
     public TextMessage() {
         super();
@@ -41,7 +31,6 @@ public class TextMessage extends ChatMessage {
         this.contentType = ContentType.TEXT.type();
     }
 
-
     @Override
     public String toString() {
         return "TextMessage{" +
@@ -50,8 +39,6 @@ public class TextMessage extends ChatMessage {
                 ", msgType=" + msgType +
                 ", contentType=" + contentType +
                 ", content='" + content + '\'' +
-                ", sender='" + sender + '\'' +
-                ", receiver='" + receiver + '\'' +
                 '}';
     }
 }

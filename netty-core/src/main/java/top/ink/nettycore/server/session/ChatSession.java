@@ -56,6 +56,7 @@ public class ChatSession implements Session {
     @Override
     public Channel getSession(String lid) {
         String channelId = redisUtil.valueGet(lid);
+        log.info("lid: {}, channelId:{}", lid, channelId);
         return idChannelMap.get(channelId);
     }
 

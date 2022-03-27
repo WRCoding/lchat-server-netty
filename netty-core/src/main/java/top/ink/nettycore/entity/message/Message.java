@@ -11,7 +11,7 @@ import top.ink.nettycore.entity.BaseEntity;
 @EqualsAndHashCode(callSuper = true)
 public abstract class Message extends BaseEntity {
     /** 序列号 */
-    protected String msgSeq;
+    protected Long msgSeq;
 
     /** 类型type：Chat,System */
     protected byte type;
@@ -22,6 +22,31 @@ public abstract class Message extends BaseEntity {
     /** 内容类型 */
     protected byte contentType;
 
+    /**
+     * 发送方
+     */
+    private String sender;
+
+    /**
+     * 接收方
+     */
+    private String receiver;
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
 
     /**
      * Description: 设置seqId
@@ -30,7 +55,7 @@ public abstract class Message extends BaseEntity {
      * Author: ink
      * Date: 2022/3/6
     */
-    public void setMsgSeq(String msgSeq){
+    public void setMsgSeq(Long msgSeq){
         this.msgSeq = msgSeq;
     }
 
@@ -40,7 +65,7 @@ public abstract class Message extends BaseEntity {
      * Author: ink
      * Date: 2022/3/6
      */
-    public String getMsgSeq(){
+    public Long getMsgSeq(){
         return this.msgSeq;
     }
 

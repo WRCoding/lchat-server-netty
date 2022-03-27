@@ -29,7 +29,6 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Message message, ByteBuf byteBuf) throws Exception {
-        System.out.println("encode: ");
         byteBuf.writeBytes(new byte[]{'i', 'n', 'k'});
         byteBuf.writeByte(1);
         byteBuf.writeInt(0xFFFF);
@@ -64,7 +63,6 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
             //聊天消息
             Class<? extends ChatMessage> chatMessageClass = ChatMessage.getChatMessageClass(contentType);
             ChatMessage chatMessage = algorithm.deserialize(chatMessageClass, bytes);
-            System.out.println("decode: "+chatMessage);
             list.add(chatMessage);
         }else {
             //系统消息

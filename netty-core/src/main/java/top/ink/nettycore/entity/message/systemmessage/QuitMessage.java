@@ -14,12 +14,6 @@ import top.ink.nettycore.constant.MsgType;
 @Data
 public class QuitMessage extends SystemMessage{
 
-    /** 发生方 */
-    private String sender;
-
-    /** 接收方 */
-    private String receiver;
-
     public QuitMessage() {
         super();
         this.setMsgType();
@@ -30,15 +24,4 @@ public class QuitMessage extends SystemMessage{
         this.msgType = MsgType.QUIT.type();
     }
 
-    @Override
-    public String toString() {
-        return "QuitMessage{" +
-                "msgSeq='" + msgSeq + '\'' +
-                ", type=" + type +
-                ", msgType=" + msgType +
-                ", contentType=" + contentType +
-                ", sender='" + sender + '\'' +
-                ", receiver='" + receiver + '\'' +
-                '}';
-    }
 }

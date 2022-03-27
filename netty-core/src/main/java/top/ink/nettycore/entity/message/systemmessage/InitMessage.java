@@ -14,12 +14,6 @@ import top.ink.nettycore.constant.MsgType;
 @Data
 public class InitMessage extends SystemMessage{
 
-    /** 发生方 */
-    private String sender;
-
-    /** 接收方 */
-    private String receiver;
-
     public InitMessage() {
         super();
         this.setMsgType();
@@ -30,15 +24,4 @@ public class InitMessage extends SystemMessage{
         super.msgType = MsgType.INIT.type();
     }
 
-    @Override
-    public String toString() {
-        return "InitMessage{" +
-                "msgSeq='" + msgSeq + '\'' +
-                ", type=" + type +
-                ", msgType=" + msgType +
-                ", contentType=" + contentType +
-                ", sender='" + sender + '\'' +
-                ", receiver='" + receiver + '\'' +
-                '}';
-    }
 }

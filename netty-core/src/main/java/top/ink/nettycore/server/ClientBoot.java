@@ -46,7 +46,7 @@ public class ClientBoot {
         InitMessage message = new InitMessage();
         message.setSender("xi");
         message.setReceiver("li");
-        message.setMsgSeq("12123132");
+        message.setMsgSeq(12123132L);
         System.out.println(message.getType());
         System.out.println(message.getMsgType());
         System.out.println(message.getContentType());

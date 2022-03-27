@@ -14,12 +14,6 @@ import top.ink.nettycore.constant.MsgType;
 @Data
 public class AckMessage extends SystemMessage{
 
-    /** 发生方 */
-    private String sender;
-
-    /** 接收方 */
-    private String receiver;
-
     public AckMessage() {
         super();
         this.setMsgType();
@@ -33,12 +27,10 @@ public class AckMessage extends SystemMessage{
     @Override
     public String toString() {
         return "AckMessage{" +
-                "msgSeq='" + msgSeq + '\'' +
+                "msgSeq=" + msgSeq +
                 ", type=" + type +
                 ", msgType=" + msgType +
                 ", contentType=" + contentType +
-                ", sender='" + sender + '\'' +
-                ", receiver='" + receiver + '\'' +
                 '}';
     }
 }

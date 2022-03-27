@@ -61,7 +61,10 @@ public class SystemMessageHandler extends SimpleChannelInboundHandler<SystemMess
     }
 
     private void handlerAck(ChannelHandlerContext ctx, AckMessage ackMessage) {
-
+        String receiver = ackMessage.getReceiver();
+        Channel channel = this.session.getSession(receiver);
+        log.info("收到ack消息: {}", ackMessage);
+        channel.writeAndFlush(ackMessage);
     }
 
 

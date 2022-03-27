@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 import top.ink.nettycore.constant.MsgType;
+import top.ink.nettycore.entity.message.Message;
 import top.ink.nettycore.entity.message.chatmessage.ChatMessage;
 import top.ink.nettycore.entity.message.chatmessage.TextMessage;
 import top.ink.nettycore.entity.message.systemmessage.AckMessage;
@@ -52,13 +53,29 @@ public class ChatMessageHandler extends SimpleChannelInboundHandler<ChatMessage>
     private void handlerSingle(ChannelHandlerContext ctx, ChatMessage chatMessage) {
         TextMessage textMessage = (TextMessage) chatMessage;
         String receiver = textMessage.getReceiver();
+        String sender = textMessage.getSender();
+        log.info("收到{}, 发送给{}的消息: {}",sender,receiver,textMessage);
         if (session.exist(receiver)){
             Channel channel = this.session.getSession(receiver);
             channel.writeAndFlush(textMessage);
+        }else{
+//            String content = textMessage.getContent();
+//            if (content.length() < 4){
+//                Channel channel = this.session.getSession(sender);
+//                channel.writeAndFlush(createAck(chatMessage));
+//            }
         }
     }
 
     private void handlerGroup(ChannelHandlerContext ctx, ChatMessage chatMessage) {
 
+    }
+
+    private AckMessage createAck(ChatMessage message){
+        AckMessage ack = new AckMessage();
+        ack.setReceiver(message.getSender());
+        ack.setSender(message.getReceiver());
+        ack.setMsgSeq(message.getMsgSeq());
+        return ack;
     }
 }
