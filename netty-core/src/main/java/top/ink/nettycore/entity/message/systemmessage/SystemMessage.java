@@ -22,8 +22,6 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 public abstract class SystemMessage extends Message {
 
-    private final String content = "-";
-
     private static final Map<Byte, Class<? extends SystemMessage>> SYSTEM_MESSAGE_CLASSES = new HashMap<>();
 
     public SystemMessage() {

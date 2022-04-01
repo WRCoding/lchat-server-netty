@@ -23,6 +23,9 @@ public enum MsgType {
     /** ACK */
     ACK(8),
 
+    /** 通知 */
+    NOTIFY(10),
+
     /** 错误 */
     ERROR(-1);
 

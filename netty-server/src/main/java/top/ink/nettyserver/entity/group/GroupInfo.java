@@ -2,7 +2,7 @@ package top.ink.nettyserver.entity.group;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import top.ink.nettycore.entity.BaseEntity;
+import top.ink.nettyserver.entity.common.BaseEntity;
 
 
 /**

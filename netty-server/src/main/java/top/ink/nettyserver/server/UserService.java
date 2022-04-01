@@ -2,11 +2,20 @@ package top.ink.nettyserver.server;
 
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.model.CannedAccessControlList;
+import com.aliyun.oss.model.PutObjectRequest;
+import com.aliyun.oss.model.PutObjectResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import top.ink.nettycore.util.RedisUtil;
 import top.ink.nettyserver.LcIdGenerate;
 import top.ink.nettyserver.entity.common.Response;
@@ -20,8 +29,15 @@ import top.ink.nettyserver.mapper.FriendMapper;
 import top.ink.nettyserver.mapper.UserMapper;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * desc: 用户相关类
@@ -39,6 +55,15 @@ public class UserService {
 
     @Resource
     private FriendMapper friendMapper;
+
+    @Value("${endpoint}")
+    private String endPoint;
+    @Value("${accessKeyId}")
+    private String accessKeyId;
+    @Value("${accessKeySecret}")
+    private String accessKeySecret;
+    @Value("${bucket}")
+    private String bucket;
 
     /**
      * Description: 注册用户
@@ -146,4 +171,98 @@ public class UserService {
         }
         return Response.success(getFriendInfoByLid(lid));
     }
+
+
+    public Response<UserDTO> uploadFile(MultipartFile file, String lid, boolean flag) {
+        String url = handlerFile(file, flag);
+        if (!StringUtils.hasText(url)) {
+            return Response.error(ResponseCode.ERROR, flag ? "背景图" : "头像" + "上传失败");
+        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("lid", lid);
+        final User user = userMapper.selectOne(queryWrapper);
+        if (ObjectUtils.isEmpty(user)) {
+            return Response.error(ResponseCode.PARAM_FAIL, "该用户不存在");
+        }
+        if (flag) {
+            user.setBackground(url);
+        } else {
+            user.setAvatar(url);
+        }
+        return update(user);
+    }
+
+    public Response<UserDTO> update(User user) {
+        userMapper.updateById(user);
+        UserDTO userDTO = UserDTO.copy(user);
+        userDTO.setDays(calDays(user));
+        return Response.success(userDTO);
+    }
+
+    private String handlerFile(MultipartFile file, boolean flag) {
+        String url = "";
+        if (file != null) {
+            String originalFilename = "";
+            if (file.getOriginalFilename() != null && !"".equals(originalFilename = file.getOriginalFilename())) {
+                File localFile = new File(originalFilename);
+                try (FileOutputStream outputStream = new FileOutputStream(localFile)) {
+                    outputStream.write(file.getBytes());
+                    file.transferTo(localFile);
+                    url = uploadLocalFileToOSS(localFile, flag);
+                } catch (IOException e) {
+                    log.error("handlerFileList cause {}", e.getMessage());
+                } finally {
+                    if (!localFile.delete()) {
+                        log.error("本地文件删除失败: {}", localFile.getName());
+                    }
+                }
+            }
+        }
+        return url;
+    }
+
+    private String uploadLocalFileToOSS(File localFile, boolean flag) {
+        OSS ossClient = new OSSClientBuilder().build(endPoint, accessKeyId,
+                accessKeySecret);
+        boolean isImage = true;
+        try {
+            BufferedImage image = ImageIO.read(localFile);
+            isImage = image != null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = format.format(new Date());
+        String filePre = flag ? "background" : "avatar";
+        String fileAddress = filePre + "/" + dateStr + "/"
+                + UUID.randomUUID().toString().replace("-", "")
+                + "-" + localFile.getName();
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, fileAddress, localFile);
+        String fileUrl;
+        if (isImage) {
+            fileUrl = "https://" + bucket + "." + endPoint + "/" + fileAddress;
+        } else {
+            fileUrl = "非图片 不可预览 文件路径为: " + fileAddress;
+        }
+        PutObjectResult result = ossClient.putObject(putObjectRequest);
+        ossClient.setBucketAcl(bucket, CannedAccessControlList.PublicRead);
+        if (result != null) {
+            log.info("OSS文件上传成功，URL: {}", fileUrl);
+        }
+        ossClient.shutdown();
+        return fileUrl;
+    }
+
+    public Response<UserDTO> updateUser(String lid, String name, String desc) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("lid", lid);
+        final User user = userMapper.selectOne(queryWrapper);
+        if (ObjectUtils.isEmpty(user)) {
+            return Response.error(ResponseCode.PARAM_FAIL, "该用户不存在");
+        }
+        user.setDescription(desc);
+        user.setUserName(name);
+        return update(user);
+    }
+
 }

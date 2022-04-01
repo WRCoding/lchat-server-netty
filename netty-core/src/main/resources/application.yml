@@ -1,0 +1,10 @@
+message:
+  serializer: json
+spring:
+  kafka:
+    bootstrap-servers: 106.75.148.242:9092
+    consumer:
+      group-id: chatGroup-Netty
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer

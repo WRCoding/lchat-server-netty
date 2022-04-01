@@ -21,7 +21,7 @@ public class InitMessage extends SystemMessage{
 
     @Override
     public void setMsgType() {
-        super.msgType = MsgType.INIT.type();
+        this.msgType = MsgType.INIT.type();
     }
 
 }

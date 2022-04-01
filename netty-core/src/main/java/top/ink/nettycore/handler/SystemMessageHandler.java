@@ -39,7 +39,6 @@ public class SystemMessageHandler extends SimpleChannelInboundHandler<SystemMess
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, SystemMessage systemMessage) throws Exception {
-        System.out.println(systemMessage.toString());
         switch (MsgType.getMsgType(systemMessage.getMsgType())) {
             case INIT:
                 handlerInit(ctx, (InitMessage)systemMessage);

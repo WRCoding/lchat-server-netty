@@ -1,4 +1,4 @@
-package top.ink.nettycore.entity;
+package top.ink.nettykafkaconsumer.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+
 /**
- * desc: BaseEntity
- * @author:ink
- * date:2022-02-27 19:39
+ * @author 林北
+ * @description 实体基类
+ * @date 2021-08-08 10:36
  */
+
 @Data
 public class BaseEntity {
 
@@ -22,8 +24,4 @@ public class BaseEntity {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updated;
-
-    public static void main(String[] args) {
-
-    }
 }

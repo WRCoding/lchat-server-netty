@@ -1,6 +1,8 @@
 package top.ink.nettyserver.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import top.ink.nettyserver.entity.common.Response;
 import top.ink.nettyserver.entity.dto.FriendDTO;
 import top.ink.nettyserver.entity.dto.LoginDTO;
@@ -19,6 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
     @Resource
@@ -47,6 +50,17 @@ public class UserController {
     @GetMapping("/friends")
     public Response<List<UserDTO>> friends(String lid){
         return userService.friends(lid);
+    }
+
+    @PostMapping("/uploadFile")
+    public Response<UserDTO> uploadFile(MultipartFile file, String lid, boolean flag){
+        return userService.uploadFile(file,lid,flag);
+    }
+
+    @PostMapping("/update")
+    public Response<UserDTO> updateUser(String lid, String name, String desc){
+        log.info("lid: {}, name: {}, desc: {}", lid, name, desc);
+        return userService.updateUser(lid, name, desc);
     }
 
 }

@@ -1,7 +1,7 @@
 package top.ink.nettycore.protocol;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.alibaba.fastjson.JSON;
+
 
 import java.nio.charset.StandardCharsets;
 
@@ -14,18 +14,16 @@ import java.nio.charset.StandardCharsets;
 public enum Algorithm implements Serializer {
 
     /** JSON序列化 */
-    JSON{
+    json{
         @Override
         public <T> T deserialize(Class<T> clazz, byte[] bytes) {
-            Gson gson = new Gson();
             String json = new String(bytes, StandardCharsets.UTF_8);
-            return gson.fromJson(json, clazz);
+            return JSON.parseObject(json, clazz);
         }
 
         @Override
         public <T> byte[] serialize(T object) {
-            Gson gson = new Gson();
-            String json = gson.toJson(object);
+            String json = JSON.toJSONString(object);
             return json.getBytes(StandardCharsets.UTF_8);
         }
     };

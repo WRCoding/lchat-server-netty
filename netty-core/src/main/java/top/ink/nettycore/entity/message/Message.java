@@ -1,15 +1,15 @@
 package top.ink.nettycore.entity.message;
 
 import lombok.EqualsAndHashCode;
-import top.ink.nettycore.entity.BaseEntity;
+
 
 /**
  * desc: message
  * @author ink
  * date:2022-02-22 23:21
  */
-@EqualsAndHashCode(callSuper = true)
-public abstract class Message extends BaseEntity {
+@EqualsAndHashCode(callSuper = false)
+public abstract class Message {
     /** 序列号 */
     protected Long msgSeq;
 

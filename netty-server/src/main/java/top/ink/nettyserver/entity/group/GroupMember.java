@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import top.ink.nettycore.entity.BaseEntity;
+import top.ink.nettyserver.entity.common.BaseEntity;
 
 
 /**

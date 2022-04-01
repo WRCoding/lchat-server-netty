@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import top.ink.nettycore.entity.message.Message;
 import top.ink.nettycore.entity.message.systemmessage.InitMessage;
+import top.ink.nettycore.entity.message.systemmessage.NotifyMessage;
 import top.ink.nettycore.util.RedisUtil;
 
 import javax.annotation.Resource;
@@ -32,7 +33,7 @@ public class ChatSession implements Session {
     @Resource
     private RedisUtil redisUtil;
 
-    private final ConcurrentHashMap<String,Channel> idChannelMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Channel> idChannelMap = new ConcurrentHashMap<>();
 
 
     @Override
@@ -43,9 +44,9 @@ public class ChatSession implements Session {
         StringBuffer channelId = new StringBuffer(ids[0]);
         channelId.append("-").append(ids[3]).append("-").append(ids[4]);
         InetSocketAddress address = sc.remoteAddress();
-        log.info("用户: {}, ip: {}, port:{} 登录, channelId: {}",initMessage.getSender(), address.getHostString(), address.getPort(), channelId);
-        redisUtil.valuePut(initMessage.getSender(),channelId.toString());
-        idChannelMap.put(channelId.toString(),channel);
+        log.info("用户: {}, ip: {}, port:{} 登录, channelId: {}", initMessage.getSender(), address.getHostString(), address.getPort(), channelId);
+        redisUtil.valuePut(initMessage.getSender(), channelId.toString());
+        idChannelMap.put(channelId.toString(), channel);
     }
 
     @Override
@@ -63,5 +64,13 @@ public class ChatSession implements Session {
     @Override
     public boolean exist(String lid) {
         return redisUtil.hasKey(lid);
+    }
+
+
+    @Override
+    public void notify(String lid, String content) {
+        Channel channel = getSession(lid);
+        NotifyMessage notifyMessage = new NotifyMessage(content);
+        channel.writeAndFlush(notifyMessage);
     }
 }

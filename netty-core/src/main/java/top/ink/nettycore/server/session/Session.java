@@ -52,4 +52,14 @@ public interface Session {
      * Date: 2022/3/20
     */
     boolean exist(String lid);
+
+    /**
+     * Description: 提供发送消息的方法
+     * @param lid
+     * @param param
+     * return void
+     * Author: ink
+     * Date: 2022/3/31
+    */
+    void notify(String lid, String param);
 }

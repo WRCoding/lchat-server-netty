@@ -5,6 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
 import top.ink.nettycore.server.ChatBootServer;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +15,7 @@ import javax.annotation.Resource;
  * @author wanglongjun
  */
 @SpringBootApplication
-@ComponentScan(basePackages = {"top.ink.nettycore","top.ink.nettyserver"})
+@ComponentScans(value = {@ComponentScan(basePackages = {"top.ink.nettycore","top.ink.nettyserver"})})
 @MapperScan(basePackages = {"top.ink.nettyserver.mapper"})
 @Slf4j
 public class NettyServerApplication {

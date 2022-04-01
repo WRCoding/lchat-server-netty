@@ -1,11 +1,13 @@
 package top.ink.nettycore.handler;
 
+import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import top.ink.nettycore.constant.MsgType;
 import top.ink.nettycore.entity.message.Message;
@@ -33,6 +35,9 @@ public class ChatMessageHandler extends SimpleChannelInboundHandler<ChatMessage>
     @Resource
     private Session session;
 
+    @Resource
+    private KafkaTemplate<String, String> kafkaTemplate;
+
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ChatMessage chatMessage) throws Exception {
@@ -56,15 +61,24 @@ public class ChatMessageHandler extends SimpleChannelInboundHandler<ChatMessage>
         String sender = textMessage.getSender();
         log.info("收到{}, 发送给{}的消息: {}",sender,receiver,textMessage);
         if (session.exist(receiver)){
-            Channel channel = this.session.getSession(receiver);
+            Channel channel = session.getSession(receiver);
             channel.writeAndFlush(textMessage);
         }else{
-//            String content = textMessage.getContent();
-//            if (content.length() < 4){
-//                Channel channel = this.session.getSession(sender);
-//                channel.writeAndFlush(createAck(chatMessage));
-//            }
+            sendMsg2Kafka(textMessage);
+
         }
+    }
+
+    private void sendMsg2Kafka(ChatMessage chatMessage) {
+        String message = JSON.toJSONString(chatMessage);
+        kafkaTemplate.send("chat-netty", message).addCallback(success -> {
+            log.info("成功发送消息到,topic:{} ,partition:{} ,offset:{}", success.getRecordMetadata().topic(),
+                    success.getRecordMetadata().partition(), success.getRecordMetadata().offset());
+            Channel channel = this.session.getSession(chatMessage.getSender());
+            channel.writeAndFlush(createAck(chatMessage));
+        }, error -> {
+            log.error("消息发送失败: {}", error.getMessage());
+        });
     }
 
     private void handlerGroup(ChannelHandlerContext ctx, ChatMessage chatMessage) {
@@ -76,6 +90,7 @@ public class ChatMessageHandler extends SimpleChannelInboundHandler<ChatMessage>
         ack.setReceiver(message.getSender());
         ack.setSender(message.getReceiver());
         ack.setMsgSeq(message.getMsgSeq());
+        log.info("ack : {}", ack);
         return ack;
     }
 }

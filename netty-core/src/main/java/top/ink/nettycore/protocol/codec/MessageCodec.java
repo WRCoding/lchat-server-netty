@@ -3,6 +3,7 @@ package top.ink.nettycore.protocol.codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import top.ink.nettycore.constant.Type;
@@ -21,18 +22,21 @@ import java.util.List;
  * date:2022-02-28 21:20
  */
 @Component
+@Slf4j
 public class MessageCodec extends ByteToMessageCodec<Message> {
 
     @Value("${message.serializer}")
-    String serializer = "JSON";
+    String serializer="json";
 
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Message message, ByteBuf byteBuf) throws Exception {
+        log.info("encode: {}", message);
         byteBuf.writeBytes(new byte[]{'i', 'n', 'k'});
         byteBuf.writeByte(1);
         byteBuf.writeInt(0xFFFF);
         //0-JSON
+        int ordinal = Algorithm.valueOf(serializer).ordinal();
         byteBuf.writeByte(Algorithm.valueOf(serializer).ordinal());
         //内容类型
         byteBuf.writeByte(message.getContentType());
